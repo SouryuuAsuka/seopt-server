@@ -1,5 +1,5 @@
-name: seoptimus-server-build
-run-name: ${{ github.actor }} starts building the seoptimus-server
+name: seopt-server-build
+run-name: ${{ github.actor }} starts building the seopt-server
 on:
   push:
     branches:
@@ -24,8 +24,8 @@ jobs:
         script: |
           echo {$USER}
           ssh -T git@github.com
-          cd ~/test-projects/seoptimus/server
-          git pull git@github.com:SouryuuAsuka/seoptimus-server.git main
+          cd ~/test-projects/seopt/server
+          git pull git@github.com:SouryuuAsuka/seopt-server.git main
           git status
           cd ../docker
           docker-compose build

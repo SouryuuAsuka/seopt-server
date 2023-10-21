@@ -1,7 +1,7 @@
 FROM node:18
 
 # создание директории приложения
-WORKDIR /usr/src/docker/test/seoptimus/server
+WORKDIR /usr/src/docker/test/seopt/server
 
 COPY package*.json ./
 
