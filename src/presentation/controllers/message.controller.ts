@@ -1,18 +1,18 @@
 import { IDependency } from '@application/ports/IDependency';
-import transactionUseCase from '@application/use-cases/transaction.use-cse';
+import messageUseCase from '@application/use-cases/message.use-cse';
 
-const transactionControllerCreate = (dependencies: IDependency) => {
+const messageControllerCreate = (dependencies: IDependency) => {
   const {
     get,
-  } = transactionUseCase();
+  } = messageUseCase();
 
   const getController = async (req: any, res: any, next: any) => {
     try {
       const interval = req.query?.i;
-      const {trancations}= await get(interval);
+      await get(interval);
       return res.status(200).json({
         status: 'success',
-        data: trancations
+        data: {}
       })
     } catch (err: any) {
       return res.status(500).json({
@@ -26,4 +26,4 @@ const transactionControllerCreate = (dependencies: IDependency) => {
   }
 }
 
-export default transactionControllerCreate;
+export default messageControllerCreate;

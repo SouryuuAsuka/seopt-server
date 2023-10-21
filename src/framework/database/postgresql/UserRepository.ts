@@ -8,7 +8,7 @@ export default class UserRepository {
   async get(user_id: number): Promise<any[]> {
     const queryString = `
       UPDATE 
-      h2o_users
+      seopt_users
       SET last_update = $1
       WHERE user_id = $2
       RETURNING
@@ -22,7 +22,7 @@ export default class UserRepository {
   }
   async create(username: string, hash: string, avatar: number, user_role: number = 0): Promise<any[]> {
     const queryString = `
-      INSERT INTO h2o_users (username, hash, avatar, user_role, created, last_update)
+      INSERT INTO seopt_users (username, hash, avatar, user_role, created, last_update)
       VALUES ($1, $2, $3, $4, $5, $6) 
       RETURNING 
       user_id AS "user_id"
@@ -35,7 +35,7 @@ export default class UserRepository {
   async sign(username: string, hash: string): Promise<any[]> {
     const queryString = `
       UPDATE 
-      h2o_users
+      seopt_users
       SET last_update = $1
       WHERE username = $2 AND hash = $3
       RETURNING
@@ -52,7 +52,7 @@ export default class UserRepository {
   async setAvatar(user_id: number, avatar: number): Promise<boolean> {
     const queryString = `
     UPDATE 
-    h2o_users
+    seopt_users
     SET 
     last_update = $1
     , avatar = $2
@@ -65,7 +65,7 @@ export default class UserRepository {
   async lastUpdate(user_id: number): Promise<boolean> {
     const queryString = `
       UPDATE 
-      h2o_users
+      seopt_users
       SET last_update = $1
       WHERE user_id = $2`;
     const { rowCount } = await this.pool.query(queryString, ["NOW()", user_id]);
@@ -74,7 +74,7 @@ export default class UserRepository {
   }
   async createRefreshToken(user_id: number, hash: string): Promise<boolean> {
     const queryString = `
-      INSERT INTO h2o_refresh_tokens (user_id, hash, created)
+      INSERT INTO seopt_refresh_tokens (user_id, hash, created)
       VALUES ($1, $2, $3)`;
     const { rowCount } = await this.pool.query(queryString, [user_id, hash, "NOW()"]);
     if (rowCount == 0) throw new Error("Ошибка при создании пользователя");
@@ -84,7 +84,7 @@ export default class UserRepository {
     const queryString = `
     SELECT
     token_id AS "tokenId"
-    FROM h2o_refresh_tokens
+    FROM seopt_refresh_tokens
     WHERE user_id = $1 AND hash = $2`
     const { rows } = await this.pool.query(queryString, [user_id, hash]);
     return rows;
@@ -92,7 +92,7 @@ export default class UserRepository {
   async updateRefreshTokenById(tokenId: number, hash: string): Promise<boolean>{
     const queryString = `
     UPDATE 
-    h2o_refresh_tokens
+    seopt_refresh_tokens
     SET hash = $1
     , created = $2
     WHERE token_id = $3`;
