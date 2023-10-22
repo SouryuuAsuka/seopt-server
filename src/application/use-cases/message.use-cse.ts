@@ -1,7 +1,7 @@
 import { IOpenaiService } from "@application/ports";
-import { IMessageRepository } from "@application/ports/repository";
+import { IMessageRepository, IUserRepository } from "@application/ports/repository";
 
-const messageUseCase = (messageRepository: IMessageRepository, openaiService: IOpenaiService) => {
+const messageUseCase = (userRepository: IUserRepository, messageRepository: IMessageRepository, openaiService: IOpenaiService) => {
   const create = async (userId: number, text: string, quetionProperties: any, chatId: number | null = null) => {
     let foundChatId: number | null = null;
     if (chatId) {
@@ -15,8 +15,10 @@ const messageUseCase = (messageRepository: IMessageRepository, openaiService: IO
       foundChatId = createdChat[0].chat_id;
     }
     const question = await messageRepository.createMessage(text, 'question', foundChatId, quetionProperties);
-    const answer = await openaiService.sendPromt(text);
-    console.log(JSON.stringify(answer));
+    const answerText = await openaiService.sendPromt(quetionProperties.type, quetionProperties.limit, text);
+    await userRepository.reduceGenerations(userId);
+    console.log(JSON.stringify(answerText));
+    const answer = await messageRepository.createMessage(answerText, 'answer', foundChatId, {reply_id: question[0].message_id });
     return { answer, question }
   }
   return {

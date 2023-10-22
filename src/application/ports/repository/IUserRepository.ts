@@ -7,4 +7,5 @@ export interface IUserRepository {
   createRefreshToken(user_id: number, hash: string): Promise<boolean>;
   getRefreshToken(user_id: number, hash: string): Promise<any[]>;
   updateRefreshTokenById(tokenId: number, hash: string): Promise<boolean>;
+  reduceGenerations(userId: number): Promise<boolean>;
 }

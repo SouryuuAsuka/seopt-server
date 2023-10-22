@@ -121,8 +121,19 @@ export default class UserRepository {
     SET hash = $1
     , created = $2
     WHERE token_id = $3`;
-  const { rowCount, rows } = await this.pool.query(queryString, [hash, "NOW()", tokenId]);
+  const { rowCount } = await this.pool.query(queryString, [hash, "NOW()", tokenId]);
   if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
   return true;
+  }
+  async reduceGenerations(userId: number){
+    const queryString = `
+    UPDATE 
+    seopt_users
+    SET generations = generations - 1
+    , last_update = $1
+    WHERE user_id = $2`;
+    const { rowCount } = await this.pool.query(queryString, ["NOW()", userId ]);
+    if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
+    return true;
   }
 }

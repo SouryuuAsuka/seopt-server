@@ -1,3 +1,3 @@
 export interface IOpenaiService{
-  sendPromt(content: string):Promise<any>;
+  sendPromt(type: number, limit: number, content: string):Promise<any>;
 }
