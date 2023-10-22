@@ -13,6 +13,7 @@ export default class UserRepository {
       , u.avatar
       , u.user_role 
       , u.created
+      , u.generations
       , json_agg( 
         json_build_object(
           'chat_id', c.chat_id
