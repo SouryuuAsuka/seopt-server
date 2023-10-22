@@ -2,17 +2,24 @@ import { IDependency } from '@application/ports/IDependency';
 import messageUseCase from '@application/use-cases/message.use-cse';
 
 const messageControllerCreate = (dependencies: IDependency) => {
-  const {
-    get,
-  } = messageUseCase();
+  const { messageRepository } = dependencies.DatabaseService;
+  const openaiService = dependencies.OpenaiService;
 
-  const getController = async (req: any, res: any, next: any) => {
+  const {
+    create,
+  } = messageUseCase(messageRepository, openaiService);
+
+  const createController = async (req: any, res: any, next: any) => {
     try {
-      const interval = req.query?.i;
-      await get(interval);
+      if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
+      const { promt, chatId, properties } = req.body;
+      const { answer, question } = await create(res.locals.userId, promt, properties, chatId);
       return res.status(200).json({
         status: 'success',
-        data: {}
+        data: {
+          answer,
+          question
+        }
       })
     } catch (err: any) {
       return res.status(500).json({
@@ -22,7 +29,7 @@ const messageControllerCreate = (dependencies: IDependency) => {
     }
   }
   return {
-    getController,
+    createController,
   }
 }
 

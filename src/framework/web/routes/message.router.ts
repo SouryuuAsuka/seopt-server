@@ -10,6 +10,6 @@ export const messageRouter = (dependencies:IDependency) => {
 
   router.use(appInit);
 
-  router.get('/', messageController.getController);
+  router.post('/', messageController.createController);
   return router;
 }

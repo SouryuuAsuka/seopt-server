@@ -7,17 +7,41 @@ export default class UserRepository {
   }
   async get(user_id: number): Promise<any[]> {
     const queryString = `
-      UPDATE 
-      seopt_users
-      SET last_update = $1
-      WHERE user_id = $2
-      RETURNING
-      user_id AS "user_id"
-      , username
-      , avatar
-      , user_role AS "user_role"
-      , created `;
-    const { rows } = await this.pool.query(queryString, ["NOW()", user_id]);
+      SELECT
+      u.user_id 
+      , u.username
+      , u.avatar
+      , u.user_role 
+      , u.created
+      , json_agg( 
+        json_build_object(
+          'chat_id', c.chat_id
+          , 'title', c.title
+          , 'created', c.created
+          , 'messages', (
+            SELECT 
+            json_agg( 
+              json_build_object(
+                'message_id', m.message_id
+                , 'text', m.text
+                , 'type', m.type
+                , 'properties', m.properties
+                , 'created', m.created
+              )
+            )
+            FROM seopt_messages AS m
+            JOIN seopt_users AS us
+            ON c.user_id = us.user_id
+            WHERE c.chat_id = m.chat_id
+            ORDER BY m.created
+          )
+        )
+      ) AS chats 
+      FROM seopt_users AS u
+      JOIN seopt_chats AS c
+      ON c.user_id = u.user_id
+      WHERE user_id = $1`;
+    const { rows } = await this.pool.query(queryString, [user_id]);
     return rows;
   }
   async create(username: string, hash: string, avatar: number, user_role: number = 0): Promise<any[]> {
@@ -25,7 +49,7 @@ export default class UserRepository {
       INSERT INTO seopt_users (username, hash, avatar, user_role, created, last_update)
       VALUES ($1, $2, $3, $4, $5, $6) 
       RETURNING 
-      user_id AS "user_id"
+      user_id 
       , username`;
     const { rowCount, rows } = await this.pool.query(queryString, [username, hash, avatar, user_role, "NOW()", "NOW()"]);
     if (rowCount == 0) throw new Error("Ошибка при создании пользователя");
@@ -39,10 +63,10 @@ export default class UserRepository {
       SET last_update = $1
       WHERE username = $2 AND hash = $3
       RETURNING
-      user_id AS "user_id"
+      user_id
       , username
       , avatar
-      , user_role AS "user_role"
+      , user_role 
       , created`;
     const { rowCount, rows } = await this.pool.query(queryString, ["NOW()", username, hash]);
     if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");

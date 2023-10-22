@@ -3,12 +3,11 @@ import PostgresqlDatabaseService from "@framework/database/postgresql/postgresql
 import { JwtService } from "@framework/jwt/jwt.service";
 import { OpenAIService } from "@framework/openai/openai.service";
 
-
 const dependency = {
     DatabaseService: new PostgresqlDatabaseService(),
     CryptoService: new BcryptServise(),
     JwtService: new JwtService(),
-    OpenAIService: new OpenAIService(),
+    OpenaiService: new OpenAIService(),
 }
 
 export default dependency;

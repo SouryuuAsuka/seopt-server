@@ -1,10 +1,12 @@
 import { Pool } from 'pg';
 import UserRepository from './UserRepository';
-import { IUserRepository } from '@application/ports/repository';
+import MessageRepository from './MessageRepository';
+import { IUserRepository, IMessageRepository } from '@application/ports/repository';
 
 export default class PostgresqlDatabaseService {
   pool: Pool;
   userRepository: IUserRepository;
+  messageRepository: IMessageRepository;
   
   constructor() {
     this.pool = new Pool({
@@ -15,5 +17,6 @@ export default class PostgresqlDatabaseService {
       host: '172.17.0.1',
     });
     this.userRepository = new UserRepository(this.pool);
+    this.messageRepository = new MessageRepository(this.pool);
   }
 }

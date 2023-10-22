@@ -1,5 +1,6 @@
 import { IDependency } from '@application/ports/IDependency';
 import userUseCase from '@application/use-cases/user.use-case';
+import { isStringObject } from 'util/types';
 const userControllerCreate = (dependencies: IDependency) => {
   const { userRepository } = dependencies.DatabaseService;
   const cryptoService = dependencies.CryptoService;
@@ -33,6 +34,8 @@ const userControllerCreate = (dependencies: IDependency) => {
   const createController = async (req: any, res: any, next: any) => {
     try {
       const { username, password, avatar } = req.body;
+      if(typeof username !== 'string' || username.length<3 ) throw new Error('Некорректный username');
+      if(typeof password !== 'string' || password.length<5 ) throw new Error('Некорректный password');
       const { accessToken, refreshToken, user } = await createUser(username, password, avatar);
       return res.status(200).json({
         status: 'success',
