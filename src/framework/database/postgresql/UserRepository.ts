@@ -33,6 +33,7 @@ export default class UserRepository {
             JOIN seopt_users AS us
             ON c.user_id = us.user_id
             WHERE c.chat_id = m.chat_id
+            GROUP BY m.created, m.message_id
             ORDER BY m.created
           )
         )
@@ -66,7 +67,7 @@ export default class UserRepository {
       user_id
       , username
       , avatar
-      , user_role 
+      , user_role
       , created`;
     const { rowCount, rows } = await this.pool.query(queryString, ["NOW()", username, hash]);
     if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
