@@ -6,6 +6,7 @@ export default class UserRepository {
     this.pool = pool;
   }
   async get(user_id: number): Promise<any[]> {
+    console.log("userId - "+ user_id)
     const queryString = `
       SELECT
       u.user_id 
