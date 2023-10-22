@@ -25,6 +25,7 @@ const userControllerCreate = (dependencies: IDependency) => {
         },
       })
     } catch (err: any) {
+      console.log(err);
       return res.status(500).json({
         status: 'error',
         message: err.message ?? "Server error"
@@ -46,6 +47,7 @@ const userControllerCreate = (dependencies: IDependency) => {
         }
       })
     } catch (err: any) {
+      console.log(err);
       return res.status(500).json({
         status: 'error',
         message: err.message ?? "Server error"
@@ -65,6 +67,7 @@ const userControllerCreate = (dependencies: IDependency) => {
         }
       })
     } catch (err: any) {
+      console.log(err);
       return res.status(400).json({
         status: 'error',
         message: err.message ?? "Server error"
@@ -84,6 +87,7 @@ const userControllerCreate = (dependencies: IDependency) => {
         }
       })
     } catch (err: any) {
+      console.log(err);
       return res.status(500).json({
         status: 'error',
         message: err.message ?? "Server error"
