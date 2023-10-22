@@ -39,7 +39,8 @@ export default class UserRepository {
       FROM seopt_users AS u
       JOIN seopt_chats AS c
       ON c.user_id = u.user_id
-      WHERE u.user_id = $1`;
+      WHERE u.user_id = $1
+      GROUP BY u.user_id`;
     const { rows } = await this.pool.query(queryString, [user_id]);
     return rows;
   }
