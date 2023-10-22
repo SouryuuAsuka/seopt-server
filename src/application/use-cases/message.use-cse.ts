@@ -18,7 +18,7 @@ const messageUseCase = (userRepository: IUserRepository, messageRepository: IMes
     const answerText = await openaiService.sendPromt(quetionProperties.type, quetionProperties.limit, text);
     await userRepository.reduceGenerations(userId);
     console.log(JSON.stringify(answerText));
-    const answer = await messageRepository.createMessage(answerText, 'answer', foundChatId, {reply_id: question[0].message_id });
+    const answer = await messageRepository.createMessage(answerText, 'answer', foundChatId, { reply_id: question[0].message_id });
     return { answer, question }
   }
   return {

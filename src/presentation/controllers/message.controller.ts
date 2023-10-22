@@ -2,12 +2,12 @@ import { IDependency } from '@application/ports/IDependency';
 import messageUseCase from '@application/use-cases/message.use-cse';
 
 const messageControllerCreate = (dependencies: IDependency) => {
-  const { messageRepository } = dependencies.DatabaseService;
+  const { userRepository, messageRepository } = dependencies.DatabaseService;
   const openaiService = dependencies.OpenaiService;
 
   const {
     create,
-  } = messageUseCase(messageRepository, openaiService);
+  } = messageUseCase(userRepository, messageRepository, openaiService);
 
   const createController = async (req: any, res: any, next: any) => {
     try {
