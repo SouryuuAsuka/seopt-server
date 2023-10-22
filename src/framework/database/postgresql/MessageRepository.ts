@@ -19,7 +19,7 @@ export default class MessageRepository {
     const queryString = `
       INSERT INTO seopt_chats 
       (user_id, title, created)
-      VALUES ($1, $2)
+      VALUES ($1, $2, $3)
       RETURNING chat_id`;
     const { rowCount, rows } = await this.pool.query(queryString, [userId, title, "NOW()"]);
     if (rowCount == 0) throw new Error("Ошибка при создании чата");
