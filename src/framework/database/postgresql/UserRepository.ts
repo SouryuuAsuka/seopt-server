@@ -30,8 +30,6 @@ export default class UserRepository {
               )
             )
             FROM seopt_messages AS m
-            JOIN seopt_users AS us
-            ON c.user_id = us.user_id
             WHERE c.chat_id = m.chat_id
             GROUP BY m.created, m.message_id
             ORDER BY m.created
