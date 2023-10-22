@@ -6,7 +6,6 @@ export default class UserRepository {
     this.pool = pool;
   }
   async get(user_id: number): Promise<any[]> {
-    console.log("userId - "+ user_id)
     const queryString = `
       SELECT
       u.user_id 
@@ -38,12 +37,11 @@ export default class UserRepository {
         )
       ) AS chats 
       FROM seopt_users AS u
-      JOIN seopt_chats AS c
+      LEFT JOIN seopt_chats AS c
       ON c.user_id = u.user_id
       WHERE u.user_id = $1
       GROUP BY u.user_id`;
     const { rows } = await this.pool.query(queryString, [user_id]);
-    console.log(JSON.stringify(rows));
     return rows;
   }
   async create(username: string, hash: string, avatar: number, user_role: number = 0): Promise<any[]> {
