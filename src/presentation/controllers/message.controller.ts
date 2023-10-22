@@ -12,8 +12,8 @@ const messageControllerCreate = (dependencies: IDependency) => {
   const createController = async (req: any, res: any, next: any) => {
     try {
       if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
-      const { promt, chatId, properties } = req.body;
-      const { answer, question } = await create(res.locals.userId, promt, properties, chatId);
+      const { text, chatId, properties } = req.body;
+      const { answer, question } = await create(res.locals.userId, text, properties, chatId);
       return res.status(200).json({
         status: 'success',
         data: {
