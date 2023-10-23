@@ -14,30 +14,27 @@ export default class UserRepository {
       , u.user_role 
       , u.created
       , u.generations
-      , json_agg( 
-        json_build_object(
-          'chat_id', c.chat_id
-          , 'title', c.title
-          , 'created', c.created
-          , 'messages', json_agg(
-            SELECT 
-              json_build_object(
-                'message_id', m.message_id
-                , 'text', m.text
-                , 'type', m.type
-                , 'properties', m.properties
-                , 'created', m.created
-              )
-            FROM seopt_messages AS m
-            WHERE c.chat_id = m.chat_id
-            GROUP BY m.created, m.message_id
-            ORDER BY m.created
-          )
-        )
-      ) AS chats 
       FROM seopt_users AS u
-      LEFT JOIN seopt_chats AS c
-      ON c.user_id = u.user_id
+      LEFT JOIN LATERAL (
+        SELECT
+        c.chat_id
+        , c.title
+        , c.created
+        , json_agg( 
+          json_build_object(
+            'message_id', m.message_id
+            , 'text', m.text
+            , 'type', m.type
+            , 'properties', m.properties
+            , 'created', m.created
+          )
+        ) AS messages
+        FROM seopt_chats AS c
+        JOIN seopt_messages AS m
+        ON c.chat_id = m.chat_id
+        WHERE c.user_id = u.user_id
+      ) AS chats
+      ON true
       WHERE u.user_id = $1
       GROUP BY u.user_id`;
     const { rows } = await this.pool.query(queryString, [user_id]);
