@@ -15,16 +15,16 @@ export default class UserRepository {
       , u.created
       , u.generations
       , j.chats
-      FROM seopt_users AS u,
-      LATERAL (
+      FROM seopt_users AS u
+      CROSS JOIN LATERAL (
         SELECT ARRAY(
           SELECT
           c.chat_id
           , c.title
           , c.created
           , i.messages
-          FROM seopt_chats AS c,
-          LATERAL (
+          FROM seopt_chats AS c
+          CROSS JOIN LATERAL (
             SELECT ARRAY(
               SELECT
                 m.message_id
