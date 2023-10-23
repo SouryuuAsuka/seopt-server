@@ -19,19 +19,21 @@ export default class UserRepository {
       CROSS JOIN LATERAL (
         SELECT ARRAY(
           SELECT
-          json_build_object(c.chat_id
-          , c.title
-          , c.created
-          , i.messages)
+          json_build_object(
+            'chat_id', c.chat_id
+          , title, c.title
+          , created, c.created
+          , messages, i.messages)
           FROM seopt_chats AS c
           CROSS JOIN LATERAL (
             SELECT ARRAY(
               SELECT
-              json_build_object(m.message_id
-                , m.text
-                , m.type
-                , m.properties
-                , m.created)
+              json_build_object(
+                'message_id', m.message_id
+                , text, m.text
+                , type, m.type
+                , properties, m.properties
+                , created, m.created)
               FROM seopt_messages AS m
               WHERE c.chat_id = m.chat_id
             ) AS messages
