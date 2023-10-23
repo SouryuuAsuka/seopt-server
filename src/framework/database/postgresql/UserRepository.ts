@@ -15,7 +15,7 @@ export default class UserRepository {
       , u.created
       , u.generations
       , j.chats
-      FROM seopt_users AS u
+      FROM seopt_users AS u,
       LATERAL (
         SELECT ARRAY(
           SELECT
