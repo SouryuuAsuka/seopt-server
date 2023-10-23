@@ -34,7 +34,7 @@ export default class UserRepository {
         ON c.chat_id = m.chat_id
         WHERE c.user_id = u.user_id
         GROUP BY c.chat_id
-      ) AS chats
+      ) chats
       ON TRUE
       WHERE u.user_id = $1`;
     const { rows } = await this.pool.query(queryString, [user_id]);
