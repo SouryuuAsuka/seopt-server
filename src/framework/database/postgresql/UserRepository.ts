@@ -16,7 +16,7 @@ export default class UserRepository {
       , u.generations
       , j.chats
       FROM seopt_users AS u
-      LEFT JOIN LATERAL (
+      CROSS JOIN LATERAL (
         SELECT ARRAY(
           SELECT
           c.chat_id
