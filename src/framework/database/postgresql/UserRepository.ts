@@ -22,20 +22,21 @@ export default class UserRepository {
           c.chat_id
           , c.title
           , c.created
-          , json_agg( 
-            json_build_object(
-              'message_id', m.message_id
-              , 'text', m.text
-              , 'type', m.type
-              , 'properties', m.properties
-              , 'created', m.created
-            )
-          ) AS messages
-          FROM seopt_chats AS c
-          JOIN seopt_messages AS m
-          ON c.chat_id = m.chat_id
+          , i.messages
+          FROM seopt_chats AS c,
+          LATERAL (
+            SELECT ARRAY(
+              SELECT
+                m.message_id
+                , m.text
+                , m.type
+                , m.properties
+                , m.created
+              FROM seopt_messages AS m
+              WHERE c.chat_id = m.chat_id
+            ) AS messages
+          ) i
           WHERE c.user_id = u.user_id
-          GROUP BY c.chat_id
         ) AS chats
       ) j
       WHERE u.user_id = $1`;
