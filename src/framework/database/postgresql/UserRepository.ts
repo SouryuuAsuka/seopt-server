@@ -19,7 +19,7 @@ export default class UserRepository {
       CROSS JOIN LATERAL (
         SELECT ARRAY(
           SELECT
-          ROW(c.chat_id
+          json_build_object(c.chat_id
           , c.title
           , c.created
           , i.messages)
@@ -27,7 +27,7 @@ export default class UserRepository {
           CROSS JOIN LATERAL (
             SELECT ARRAY(
               SELECT
-                ROW(m.message_id
+              json_build_object(m.message_id
                 , m.text
                 , m.type
                 , m.properties
