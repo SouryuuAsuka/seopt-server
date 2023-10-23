@@ -41,6 +41,7 @@ export default class UserRepository {
       ) j
       WHERE u.user_id = $1`;
     const { rows } = await this.pool.query(queryString, [user_id]);
+    console.log(JSON.stringify(rows))
     return rows;
   }
   async create(username: string, hash: string, avatar: number, user_role: number = 0): Promise<any[]> {
