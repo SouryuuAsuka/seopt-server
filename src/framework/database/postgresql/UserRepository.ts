@@ -14,6 +14,7 @@ export default class UserRepository {
       , u.user_role 
       , u.created
       , u.generations
+      , chats
       FROM seopt_users AS u
       LEFT JOIN LATERAL (
         SELECT
