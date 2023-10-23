@@ -19,9 +19,8 @@ export default class UserRepository {
           'chat_id', c.chat_id
           , 'title', c.title
           , 'created', c.created
-          , 'messages', (
+          , 'messages', json_agg(
             SELECT 
-            json_agg( 
               json_build_object(
                 'message_id', m.message_id
                 , 'text', m.text
@@ -29,7 +28,6 @@ export default class UserRepository {
                 , 'properties', m.properties
                 , 'created', m.created
               )
-            )
             FROM seopt_messages AS m
             WHERE c.chat_id = m.chat_id
             GROUP BY m.created, m.message_id
@@ -114,25 +112,25 @@ export default class UserRepository {
     const { rows } = await this.pool.query(queryString, [user_id, hash]);
     return rows;
   }
-  async updateRefreshTokenById(tokenId: number, hash: string): Promise<boolean>{
+  async updateRefreshTokenById(tokenId: number, hash: string): Promise<boolean> {
     const queryString = `
     UPDATE 
     seopt_refresh_tokens
     SET hash = $1
     , created = $2
     WHERE token_id = $3`;
-  const { rowCount } = await this.pool.query(queryString, [hash, "NOW()", tokenId]);
-  if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
-  return true;
+    const { rowCount } = await this.pool.query(queryString, [hash, "NOW()", tokenId]);
+    if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
+    return true;
   }
-  async reduceGenerations(userId: number){
+  async reduceGenerations(userId: number) {
     const queryString = `
     UPDATE 
     seopt_users
     SET generations = generations - 1
     , last_update = $1
     WHERE user_id = $2`;
-    const { rowCount } = await this.pool.query(queryString, ["NOW()", userId ]);
+    const { rowCount } = await this.pool.query(queryString, ["NOW()", userId]);
     if (rowCount == 0) throw new Error("Ошибка при обновлении пользователя");
     return true;
   }

@@ -1,6 +1,5 @@
 import { IDependency } from '@application/ports/IDependency';
 import userUseCase from '@application/use-cases/user.use-case';
-import { isStringObject } from 'util/types';
 const userControllerCreate = (dependencies: IDependency) => {
   const { userRepository } = dependencies.DatabaseService;
   const cryptoService = dependencies.CryptoService;
