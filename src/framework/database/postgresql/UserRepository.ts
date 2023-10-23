@@ -16,7 +16,7 @@ export default class UserRepository {
       , u.generations
       , j.chats
       FROM seopt_users AS u
-      CROSS JOIN LATERAL (
+      LATERAL (
         SELECT ARRAY(
           SELECT
           c.chat_id
@@ -37,8 +37,7 @@ export default class UserRepository {
           WHERE c.user_id = u.user_id
           GROUP BY c.chat_id
         ) AS chats
-      ) AS j
-      ON TRUE
+      ) j
       WHERE u.user_id = $1`;
     const { rows } = await this.pool.query(queryString, [user_id]);
     return rows;
