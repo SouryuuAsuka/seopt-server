@@ -19,10 +19,10 @@ export default class UserRepository {
       CROSS JOIN LATERAL (
         SELECT ARRAY(
           SELECT
-          c.chat_id
+          ROW(c.chat_id
           , c.title
           , c.created
-          , i.messages
+          , i.messages)
           FROM seopt_chats AS c
           CROSS JOIN LATERAL (
             SELECT ARRAY(
