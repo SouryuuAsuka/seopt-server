@@ -27,11 +27,11 @@ export default class UserRepository {
           CROSS JOIN LATERAL (
             SELECT ARRAY(
               SELECT
-                m.message_id
+                ROW(m.message_id
                 , m.text
                 , m.type
                 , m.properties
-                , m.created
+                , m.created)
               FROM seopt_messages AS m
               WHERE c.chat_id = m.chat_id
             ) AS messages
