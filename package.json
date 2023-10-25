@@ -19,6 +19,7 @@
   "dependencies": {
     "@stdlib/stats-base-dists-lognormal": "^0.1.0",
     "bcrypt": "^5.1.1",
+    "better-sse": "^0.10.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

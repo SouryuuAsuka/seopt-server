@@ -24,4 +24,15 @@ export class OpenAIService {
 
     return chatCompletion.choices;
   }
+  async sendPromtStream(type: number, limit: number, promt: string) {
+    const stream = await this.openai.chat.completions.create({
+      messages: [
+        { role: 'system', content:'You are an experienced marketer. ' + proptType[type] + " Limit on the number of letters - "+limit },
+        { role: 'user', content: promt },
+      ],
+      model: 'gpt-3.5-turbo',
+      stream: true,
+    });
+    return stream;
+  }
 }
