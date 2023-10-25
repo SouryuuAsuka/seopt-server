@@ -11,6 +11,7 @@ export const chatRouter = (dependencies:IDependency) => {
   router.use(appInit);
 
   router.post('/', chatController.createController);
-  router.post('/stream', chatController.createStreamController);
+  router.post('/async', chatController.createAsyncController);
+  router.get('/:chatId/stream', chatController.createStreamController);
   return router;
 }

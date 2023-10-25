@@ -5,11 +5,13 @@ import { createSession } from "better-sse";
 const chatControllerCreate = (dependencies: IDependency) => {
   const { userRepository, chatRepository } = dependencies.DatabaseService;
   const openaiService = dependencies.OpenaiService;
+  const cryptoService = dependencies.CryptoService;
 
   const {
     create,
+    createAsync,
     createStream
-  } = chatUseCase(userRepository, chatRepository, openaiService);
+  } = chatUseCase(userRepository, chatRepository, openaiService, cryptoService);
 
   const createController = async (req: any, res: any, next: any) => {
     try {
@@ -20,7 +22,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
         status: 'success',
         data: {
           answer,
-          question
+          question,
         }
       })
     } catch (err: any) {
@@ -31,20 +33,35 @@ const chatControllerCreate = (dependencies: IDependency) => {
       })
     }
   }
-  const createStreamController =async (req: any, res: any, next: any) => {
+  const createAsyncController = async (req: any, res: any, next: any) => {
     try {
       if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
       const { text, chatId, properties } = req.body;
-      const session = await createSession(req, res);
-      if (!session.isConnected) throw new Error('Not connected');
-      const { answer, question } = await createStream(session, res.locals.userId, text, properties, chatId);
+      const { chats, foundChatId, key, answerId } = await createAsync(res.locals.userId, text, properties, chatId);
       return res.status(200).json({
         status: 'success',
         data: {
-          answer,
-          question
+          chats,
+          chatId: foundChatId,
+          answerId,
+          key
         }
       })
+    } catch (err: any) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'error',
+        message: err.message ?? "Server error"
+      })
+    }
+  }
+  const createStreamController = async (req: any, res: any, next: any) => {
+    try {
+      const { key, answer_id } = req.query;
+      const session = await createSession(req, res);
+      if (!session.isConnected) throw new Error('Not connected');
+      await createStream(session, answer_id, key);
+      return;
     } catch (err: any) {
       console.log(err);
       return res.status(500).json({
@@ -55,6 +72,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
   }
   return {
     createController,
+    createAsyncController,
     createStreamController
   }
 }
