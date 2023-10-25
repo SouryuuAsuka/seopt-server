@@ -2,12 +2,12 @@ import { IDependency } from '@application/ports/IDependency';
 import chatUseCase from '@application/use-cases/chat.use-case';
 
 const chatControllerCreate = (dependencies: IDependency) => {
-  const { userRepository, messageRepository } = dependencies.DatabaseService;
+  const { userRepository, chatRepository } = dependencies.DatabaseService;
   const openaiService = dependencies.OpenaiService;
 
   const {
     create,
-  } = chatUseCase(userRepository, messageRepository, openaiService);
+  } = chatUseCase(userRepository, chatRepository, openaiService);
 
   const createController = async (req: any, res: any, next: any) => {
     try {

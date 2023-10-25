@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-export default class MessageRepository {
+export default class ChatRepository {
   pool: Pool;
   constructor(pool: Pool) {
     this.pool = pool;
