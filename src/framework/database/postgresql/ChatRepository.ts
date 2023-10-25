@@ -9,7 +9,7 @@ export default class ChatRepository {
   async getChat(chatId: number) {
     const queryString = `
       SELECT * 
-      FROM seopt_chat 
+      FROM seopt_chats 
       WHERE chat_id = $1 `;
     const { rows } = await this.pool.query(queryString, [chatId]);
     return rows;
