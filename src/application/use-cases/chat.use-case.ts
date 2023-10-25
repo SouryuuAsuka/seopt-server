@@ -35,7 +35,7 @@ const chatUseCase = (userRepository: IUserRepository, chatRepository: IChatRepos
       const createdChat = await chatRepository.createChat(userId, 'Новый чат');
       foundChatId = createdChat[0].chat_id;
     }
-    const key = cryptoService.generateHash(8);
+    const key = await cryptoService.generateHash(8);
     const question = await chatRepository.createMessage(text, 'question', foundChatId, properties);
     await userRepository.reduceGenerations(userId);
     const answer = await chatRepository.createMessage(null, 'answer', foundChatId, { reply_id: question[0].message_id, key });
