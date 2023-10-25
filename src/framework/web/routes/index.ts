@@ -1,2 +1,2 @@
-export * from './message.router'
+export * from './chat.router'
 export * from './user.router'

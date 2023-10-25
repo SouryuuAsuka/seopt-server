@@ -1,2 +1,2 @@
 export * from './IUserRepository';
-export * from './IMessageRepository';
+export * from './IChatRepository';
