@@ -9,14 +9,14 @@ const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
       title: "Seoptimus test app",
-      version: "0.1.0",
+      version: "1.0.0",
       description: "API тестового приложения для Seoptimus",
   },
   servers: [
-      {
-          "url": "/",
-          "description": "Local Dev"
-      },
+    {
+      url: 'https://test-seopt.lampymarket.com/api',
+      description: 'Test server',
+    },
   ],
 }
 
