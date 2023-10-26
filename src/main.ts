@@ -7,6 +7,7 @@ import * as swaggerJsdoc from "swagger-jsdoc";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
+  failOnErrors : true ,
   info: {
       title: "Seoptimus test app",
       version: "1.0.0",
