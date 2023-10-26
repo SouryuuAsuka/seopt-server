@@ -36,6 +36,7 @@ export default class UserRepository {
                 , 'created', m.created)
               FROM seopt_messages AS m
               WHERE c.chat_id = m.chat_id
+              ORDER BY m.created ASC
             ) AS messages
           ) i
           WHERE c.user_id = u.user_id

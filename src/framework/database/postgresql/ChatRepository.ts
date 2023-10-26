@@ -34,6 +34,7 @@ export default class ChatRepository {
             , 'created', m.created)
           FROM seopt_messages AS m
           WHERE c.chat_id = m.chat_id
+          ORDER BY m.created ASC
         ) AS messages
       ) i
       WHERE c.user_id = $1 `;
@@ -85,6 +86,16 @@ export default class ChatRepository {
     WHERE message_id = $2`;
     const { rowCount } = await this.pool.query(queryString, [text, messageId]);
     if (rowCount == 0) throw new Error("Ошибка при создании чата");
+    return true;
+  }
+  async setTitle(chatId: number, title: string) {
+    const queryString = `
+    UPDATE 
+      seopt_chats
+    SET title = $1
+    WHERE chat_id = $2`;
+    const { rowCount } = await this.pool.query(queryString, [title, chatId]);
+    if (rowCount == 0) throw new Error("Ошибка при обновлении чата");
     return true;
   }
 }

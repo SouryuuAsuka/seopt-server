@@ -10,7 +10,8 @@ const chatControllerCreate = (dependencies: IDependency) => {
   const {
     create,
     createAsync,
-    createStream
+    createStream,
+    setTitle
   } = chatUseCase(userRepository, chatRepository, openaiService, cryptoService);
 
   const createController = async (req: any, res: any, next: any) => {
@@ -70,10 +71,29 @@ const chatControllerCreate = (dependencies: IDependency) => {
       })
     }
   }
+  const setTitleController = async (req: any, res: any, next: any) => {
+    try {
+      if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
+      const title = req.body.title;
+      const chatId = req.params.chatId;
+      await setTitle(chatId, title);
+      return res.status(200).json({
+        status: 'success',
+        data: {}
+      })
+    } catch (err: any) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'error',
+        message: err.message ?? "Server error"
+      })
+    }
+  }
   return {
     createController,
     createAsyncController,
-    createStreamController
+    createStreamController,
+    setTitleController
   }
 }
 

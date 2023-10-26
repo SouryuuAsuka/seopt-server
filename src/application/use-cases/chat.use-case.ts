@@ -63,11 +63,16 @@ const chatUseCase = (userRepository: IUserRepository, chatRepository: IChatRepos
     await chatRepository.setMessageText(answerId, textArray.join(''));
     return;
   }
+  const setTitle = async (chatId: number, title: string) => {
+    await chatRepository.setTitle(chatId, title);
+    return true;
+  } 
 
   return {
     create,
     createAsync,
-    createStream
+    createStream,
+    setTitle
   }
 }
 
