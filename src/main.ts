@@ -2,10 +2,10 @@ import 'module-alias/register';
 import * as express from 'express';
 import { chatRouter, userRouter } from '@framework/web/routes';
 import dependency from '@configuration/projectDependencies';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from "swagger-jsdoc";
+import * as swaggerUi from 'swagger-ui-express';
+import * as swaggerJsdoc from "swagger-jsdoc";
 
-const options = {
+const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
       title: "Seoptimus test app",
@@ -18,6 +18,10 @@ const options = {
           "description": "Local Dev"
       },
   ],
+}
+
+const options = {
+  swaggerDefinition,
   apis: ["./src/routes/*.ts"],
 }
 
