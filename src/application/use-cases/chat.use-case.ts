@@ -1,9 +1,10 @@
 import { ICryptoService, IOpenaiService } from "@application/ports";
 import { IChatRepository, IUserRepository } from "@application/ports/repository";
+import { Properties } from "@domain/types";
 import { Session } from "better-sse";
 
 const chatUseCase = (userRepository: IUserRepository, chatRepository: IChatRepository, openaiService: IOpenaiService, cryptoService: ICryptoService) => {
-  const create = async (userId: number, text: string, properties: any, chatId: number | null = null) => {
+  const create = async (userId: number, text: string, properties: Properties, chatId: number | null = null) => {
     let foundChatId: number | null = null;
     if (chatId) {
       const foundChats = await chatRepository.getChat(chatId);
@@ -18,12 +19,11 @@ const chatUseCase = (userRepository: IUserRepository, chatRepository: IChatRepos
     const question = await chatRepository.createMessage(text, 'question', foundChatId, properties);
     const aiAnswer = await openaiService.sendPromt(properties.type, properties.limit, text);
     await userRepository.reduceGenerations(userId);
-    console.log(JSON.stringify(aiAnswer[0]));
-    const answer = await chatRepository.createMessage(aiAnswer[0].message.content, 'answer', foundChatId, { reply_id: question[0].message_id });
+    const answer = await chatRepository.createMessage(aiAnswer, 'answer', foundChatId, { reply_id: question[0].message_id });
     return { answer, question }
   }
 
-  const createAsync = async (userId: number, text: string, properties: any, chatId: number | null = null) => {
+  const createAsync = async (userId: number, text: string, properties: Properties, chatId: number | null = null) => {
     let foundChatId: number | null = null;
     if (chatId) {
       const foundChats = await chatRepository.getChat(chatId);

@@ -23,8 +23,7 @@ export class OpenAIService {
       ],
       model: 'gpt-3.5-turbo',
     });
-
-    return chatCompletion.choices;
+    return chatCompletion.choices[0].message.content;
   }
   async sendPromtStream(type: number, limit: number, promt: string) {
     const enc = encoding_for_model('gpt-3.5-turbo');

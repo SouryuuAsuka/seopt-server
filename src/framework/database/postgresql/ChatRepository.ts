@@ -1,3 +1,4 @@
+import { Chat, Message, Properties } from '@domain/types';
 import { Pool } from 'pg';
 
 export default class ChatRepository {
@@ -6,7 +7,7 @@ export default class ChatRepository {
     this.pool = pool;
   }
 
-  async getChat(chatId: number) {
+  async getChat(chatId: number): Promise<Chat[]> {
     const queryString = `
       SELECT * 
       FROM seopt_chats 
@@ -15,12 +16,13 @@ export default class ChatRepository {
     return rows;
   }
 
-  async getChatsByUserId(userId: number) {
+  async getChatsByUserId(userId: number): Promise<Chat[]> {
     const queryString = `
       SELECT
         c.chat_id
       , c.title
       , c.created
+      , c.user_id
       , i.messages
       FROM seopt_chats AS c
       CROSS JOIN LATERAL (
@@ -42,17 +44,19 @@ export default class ChatRepository {
     return rows;
   }
 
-  async createChat(userId: number, title: string) {
+  async createChat(userId: number, title: string): Promise<Chat[]> {
     const queryString = `
       INSERT INTO seopt_chats 
       (user_id, title, created)
       VALUES ($1, $2, $3)
-      RETURNING chat_id`;
+      RETURNING chat_id
+      , title
+      , created`;
     const { rowCount, rows } = await this.pool.query(queryString, [userId, title, "NOW()"]);
     if (rowCount == 0) throw new Error("Ошибка при создании чата");
     return rows;
   }
-  async createMessage(text: string, type: string, chatId: number, properties: any) {
+  async createMessage(text: string, type: string, chatId: number, properties: Properties): Promise<Message[]> {
     const queryString = `
       INSERT INTO seopt_messages 
       (text, type, chat_id, properties, created)
@@ -67,12 +71,14 @@ export default class ChatRepository {
     if (rowCount == 0) throw new Error("Ошибка при создании чата");
     return rows;
   }
-  async getMessage(messageId: number) {
+  async getMessage(messageId: number): Promise<Message[]> {
     const queryString = `
       SELECT 
-        properties
+        message_id
+        , properties
         , text
         , type
+        , created
       FROM seopt_messages
       WHERE message_id = $1`;
     const { rows } = await this.pool.query(queryString, [messageId]);
