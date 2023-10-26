@@ -31,7 +31,7 @@ export class OpenAIService {
     const systemPromt = 'Ты - специалист по маркетингу и SEO. ' + proptType[type];
     const tokens = enc.encode(systemPromt + ' ' + promt);
     const limitWithPromt = Math.floor(limit/4) + tokens.length;
-    console.log("tokens.length = " + tokens.length + "; limitWithPromt = " + limitWithPromt +"; systemPromt = " + systemPromt );
+    console.log("tokens.length = " + tokens.length + "; limit = "+limit+ "; Math.floor(limit/4) = "+ Math.floor(limit/4) +"; limitWithPromt = " + limitWithPromt +"; systemPromt = " + systemPromt );
     const stream = await this.openai.chat.completions.create({
       messages: [
         { role: 'system', content: systemPromt },
