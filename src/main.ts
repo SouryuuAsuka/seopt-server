@@ -7,12 +7,17 @@ import * as swaggerJsdoc from "swagger-jsdoc";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
-  failOnErrors : true ,
   info: {
-      title: "Seoptimus Test APP",
-      version: "1.0.0",
+      title: "Seoptimus Test App",
+      version: "0.1.0",
       description: "API тестового приложения для Seoptimus",
   },
+  servers: [
+      {
+          "url": "/",
+          "description": "Local Dev"
+      },
+  ],
 }
 
 const options = {
