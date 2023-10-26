@@ -9,7 +9,7 @@ const swaggerDefinition = {
   openapi: "3.0.0",
   failOnErrors : true ,
   info: {
-      title: "Seoptimus test app",
+      title: "Seoptimus Test APP",
       version: "1.0.0",
       description: "API тестового приложения для Seoptimus",
   },
