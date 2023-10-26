@@ -10,6 +10,7 @@ const userControllerCreate = (dependencies: IDependency) => {
     signin,
     updateRefreshToken
   } = userUseCase(userRepository, cryptoService, tokenService);
+
   const getController = async (req: any, res: any, next: any) => {
     try {
       if (!res.locals.isAuth) {
@@ -100,5 +101,4 @@ const userControllerCreate = (dependencies: IDependency) => {
     refreshTokenController,
   }
 }
-
 export default userControllerCreate;
