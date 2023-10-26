@@ -13,12 +13,6 @@ const swaggerDefinition = {
       version: "1.0.0",
       description: "API тестового приложения для Seoptimus",
   },
-  servers: [
-    {
-      url: 'https://test-seopt.lampymarket.com/api',
-      description: 'Test server',
-    },
-  ],
 }
 
 const options = {
