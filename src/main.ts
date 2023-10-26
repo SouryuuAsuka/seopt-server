@@ -5,7 +5,7 @@ import dependency from '@configuration/projectDependencies';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from "swagger-jsdoc";
 
-const swaggerDefinition = {
+const options = {
   openapi: "3.0.0",
   info: {
       title: "Seoptimus test app",
@@ -18,10 +18,6 @@ const swaggerDefinition = {
           "description": "Local Dev"
       },
   ],
-}
-
-const options = {
-  swaggerDefinition,
   apis: ["./src/routes/*.ts"],
 }
 
