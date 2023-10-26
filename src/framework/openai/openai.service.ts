@@ -28,10 +28,9 @@ export class OpenAIService {
   }
   async sendPromtStream(type: number, limit: number, promt: string) {
     const enc = encoding_for_model('gpt-3.5-turbo');
-    const systemPromt = 'Ты - специалист по маркетингу и SEO. ' + proptType[type];
+    const systemPromt = 'Ты - специалист по маркетингу и SEO. ' + proptType[type]+' Твой ответ не должен превышать '+limit + ' символов.';
     const tokens = enc.encode(systemPromt + ' ' + promt);
     const limitWithPromt = Math.floor(limit/4) + tokens.length;
-    console.log("tokens.length = " + tokens.length + "; limit = "+limit+ "; Math.floor(limit/4) = "+ Math.floor(limit/4) +"; limitWithPromt = " + limitWithPromt +"; systemPromt = " + systemPromt );
     const stream = await this.openai.chat.completions.create({
       messages: [
         { role: 'system', content: systemPromt },
