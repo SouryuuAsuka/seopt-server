@@ -1,4 +1,4 @@
-# Seoptimus test client
+# Seoptimus test app
 
 Ссылка: [Test-seoptimus](https://test-seopt.lampymarket.com/)
 
