@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dqbd/tiktoken": "^1.0.7",
     "@stdlib/stats-base-dists-lognormal": "^0.1.0",
     "bcrypt": "^5.1.1",
     "better-sse": "^0.10.0",

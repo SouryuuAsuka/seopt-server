@@ -58,7 +58,6 @@ const chatUseCase = (userRepository: IUserRepository, chatRepository: IChatRepos
       }
       session.push({ text: part.choices[0]?.delta?.content || '' });
       textArray.push(part.choices[0]?.delta?.content || '');
-      console.log(JSON.stringify(part.choices[0]?.delta?.content));
     }
     await chatRepository.setMessageText(answerId, textArray.join(''));
     return;
