@@ -3,29 +3,7 @@ import * as express from 'express';
 import { chatRouter, userRouter } from '@framework/web/routes';
 import dependency from '@configuration/projectDependencies';
 import * as swaggerUi from 'swagger-ui-express';
-import * as swaggerJsdoc from "swagger-jsdoc";
-
-const swaggerDefinition = {
-  openapi: "3.0.0",
-  info: {
-      title: "Seoptimus Test App",
-      version: "0.1.0",
-      description: "API тестового приложения для Seoptimus",
-  },
-  servers: [
-      {
-          "url": "/",
-          "description": "Local Dev"
-      },
-  ],
-}
-
-const options = {
-  swaggerDefinition,
-  apis: ["./framework/web/routes/*.ts"],
-}
-
-const specs = swaggerJsdoc(options);
+import * as swaggerDocument from './swagger.js';
 
 const PORT = 3000;
 const HOST = '0.0.0.0';
@@ -41,5 +19,5 @@ app.use('/api/chats/', chatRouter(dependency));
 app.use(
   "/api/docs",
   swaggerUi.serve,
-  swaggerUi.setup(specs)
+  swaggerUi.setup(swaggerDocument)
 );

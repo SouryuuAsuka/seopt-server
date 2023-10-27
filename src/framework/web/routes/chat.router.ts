@@ -83,7 +83,7 @@ export const chatRouter = (dependencies: IDependency) => {
    *      - name: key
    *        in: query
    *        required: true
-   *        description: Ключ, дающий доступ к чтению сообщения из базы данных
+   *        description: Ключ, дающий доступ к чтению сообщения из базы 
    */
   router.get('/:chatId/stream', chatController.createStreamController);
   return router;
