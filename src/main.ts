@@ -3,7 +3,7 @@ import * as express from 'express';
 import { chatRouter, userRouter } from '@framework/web/routes';
 import dependency from '@configuration/projectDependencies';
 import * as swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument from './swagger.ts';
+import * as swaggerDocument from './swagger';
 
 const PORT = 3000;
 const HOST = '0.0.0.0';

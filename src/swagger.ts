@@ -1,4 +1,4 @@
-module.exports = {
+const json = {
   openapi: "3.0.3", // present supported openapi version
   info: {
     title: "Seoptimus Test App",
@@ -9,3 +9,5 @@ module.exports = {
     },
   },
 };
+
+export default json;
