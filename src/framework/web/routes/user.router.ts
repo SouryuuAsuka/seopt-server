@@ -154,7 +154,7 @@ export const userRouter = (dependencies: IDependency) => {
   router.post('/signin', userController.signinController);
   /**
    * @swagger
-   * /users/signip:
+   * /users/token:
    *   post:
    *     summary: Обновляет токены пользователя.
    *     tags:
