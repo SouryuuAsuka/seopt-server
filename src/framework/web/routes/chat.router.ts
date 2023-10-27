@@ -14,6 +14,8 @@ export const chatRouter = (dependencies: IDependency) => {
    * /chats:
    *   post:
    *     summary: Отправляет запрос на сервер ChatGPT и возращает ответ.
+   *     tags:
+   *       - chats
    *     requestBody:
    *        required: true
    *        content:
@@ -27,6 +29,37 @@ export const chatRouter = (dependencies: IDependency) => {
    *                  type: number
    *                properties:
    *                  type: object
+   *     responses:
+   *       '200':    
+   *          description: Возвращает JSON-объекты вопроса и ответа
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: success
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      answer:
+   *                        type: object
+   *                      question:
+   *                        type: object
+   *       '500':    
+   *          description: Возвращает описание ошибки
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: error
+   *                  message:
+   *                    type: string
+   *                    example: Server error
    */
   router.post('/', chatController.createController);
   /**
@@ -34,20 +67,49 @@ export const chatRouter = (dependencies: IDependency) => {
    * /chats/{chatId}:
    *   patch:
    *     summary: Изменяет название чата.
+   *     tags:
+   *       - chats
    *     requestBody:
-   *        required: true
-   *        content:
-   *          application/json:
-   *            schema:
-   *              type: object
-   *              properties:
-   *                title: 
-   *                  type: number
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               title: 
+   *                 type: number
    *     parameters:
    *      - name: chatId
    *        in: path
    *        required: true
    *        description: Новое название чата
+   *     responses:
+   *       '200':    
+   *          description: Возвращает JSON-объекты вопроса и ответа
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: success
+   *                  data:
+   *                    type: object
+   *                    example: {}
+   *       '500':    
+   *          description: Возвращает описание ошибки
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: error
+   *                  message:
+   *                    type: string
+   *                    example: Server error
    */
   router.patch('/:chatId', chatController.setTitleController);
   /**
@@ -55,6 +117,8 @@ export const chatRouter = (dependencies: IDependency) => {
    * /chats/async:
    *   post:
    *     summary: Сохраняет новое пустое сообщение и возращает обновленный массив чатов.
+   *     tags:
+   *       - chats
    *     requestBody:
    *        required: true
    *        content:
@@ -68,22 +132,65 @@ export const chatRouter = (dependencies: IDependency) => {
    *                  type: number
    *                properties:
    *                  type: object
+   *     responses:
+   *       '200':    
+   *          description: Возвращает массив чатов пользователя, id выбранного чата, id ответа и уникальный ключ для чтения ответа
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: success
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      chats:
+   *                        type: array
+   *                        items: 
+                              type: object
+   *                      chatId:
+   *                        type: integer   
+   *                      answerId:
+   *                        type: integer
+   *                      key:
+   *                        type: string
+   *       '500':    
+   *          description: Возвращает описание ошибки
+   *          content:
+   *            application/json:
+   *              schema: 
+   *                type: object
+   *                properties:
+   *                  status:
+   *                    type: string
+   *                    example: error
+   *                  message:
+   *                    type: string
+   *                    example: Server error
    */
   router.post('/async', chatController.createAsyncController);
   /**
    * @swagger
    * /chats/{chatId}/stream:
    *   get:
-   *     summary: Изменяет название чата.
+   *     summary: Создает SSE-поток, содержащий текст ответа от ChatGPT.
+   *     tags:
+   *       - chats
    *     parameters:
    *      - name: chatId
    *        in: path
    *        required: true
-   *        description: Новое название чата
+   *        description: id чата
+   *      - name: answer_id
+   *        in: query
+   *        required: true
+   *        description: id ответа 
    *      - name: key
    *        in: query
    *        required: true
-   *        description: Ключ, дающий доступ к чтению сообщения из базы 
+   *        description: ключ, дающий доступ к чтению сообщения из базы 
    */
   router.get('/:chatId/stream', chatController.createStreamController);
   return router;

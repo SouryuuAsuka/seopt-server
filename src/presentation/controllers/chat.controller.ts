@@ -18,6 +18,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
     try {
       if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
       const { text, chatId, properties } = req.body;
+      if (!text || typeof chatId === 'undefined' || !properties) throw new Error('Ошибка передачи данных');
       const { answer, question } = await create(res.locals.userId, text, properties, chatId);
       return res.status(200).json({
         status: 'success',
@@ -38,6 +39,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
     try {
       if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
       const { text, chatId, properties } = req.body;
+      if (!text || typeof chatId === 'undefined' || !properties) throw new Error('Ошибка передачи данных');
       const { chats, foundChatId, key, answerId } = await createAsync(res.locals.userId, text, properties, chatId);
       return res.status(200).json({
         status: 'success',
@@ -59,6 +61,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
   const createStreamController = async (req: any, res: any, next: any) => {
     try {
       const { key, answer_id } = req.query;
+      if (!answer_id || !key) throw new Error('Ошибка передачи данных');
       const session = await createSession(req, res);
       if (!session.isConnected) throw new Error('Not connected');
       await createStream(session, answer_id, key);
@@ -76,6 +79,7 @@ const chatControllerCreate = (dependencies: IDependency) => {
       if (!res.locals.isAuth) throw new Error('Ошибка аутентификации');
       const title = req.body.title;
       const chatId = req.params.chatId;
+      if (!title || !chatId) throw new Error('Ошибка передачи данных');
       await setTitle(chatId, title);
       return res.status(200).json({
         status: 'success',
