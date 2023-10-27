@@ -6,7 +6,7 @@ import * as swaggerUi from 'swagger-ui-express';
 import * as swaggerJsdoc from "swagger-jsdoc";
 
 const swaggerDefinition = {
-  openapi: "3.0.0",
+  openapi: '3.1.0',
   failOnErrors : true ,
   info: {
       title: "Seoptimus test app",
