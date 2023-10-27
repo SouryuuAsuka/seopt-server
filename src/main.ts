@@ -9,7 +9,7 @@ const swaggerDefinition = {
   openapi: '3.1.0',
   failOnErrors : true ,
   info: {
-      title: "Seoptimus test app",
+      title: "Seoptimus test App",
       version: "1.0.0",
       description: "API тестового приложения для Seoptimus",
   },
@@ -23,7 +23,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ["./framework/web/routes/chat.router.ts", "./framework/web/routes/user.router.ts"],
+  apis: [`${__dirname}/framework/web/routes/*.router.ts`],
 }
 
 const specs = swaggerJsdoc(options);
