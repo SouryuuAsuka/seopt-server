@@ -149,7 +149,7 @@ export const chatRouter = (dependencies: IDependency) => {
    *                      chats:
    *                        type: array
    *                        items: 
-                              type: object
+   *                          type: object
    *                      chatId:
    *                        type: integer   
    *                      answerId:
